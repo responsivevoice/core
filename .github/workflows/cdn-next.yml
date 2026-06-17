@@ -1,0 +1,73 @@
+# Uploads the core @next IIFE bundle to the CDN. Source-only: dist is built here
+# (siblings resolved per PUBLISH_TARGET), not shipped in the split repo.
+# TODO: re-trigger off the changeset-gated @next event (per V2_PUBLISHING_PLAN.md);
+# the old `push: paths: dist/**` trigger never fires under source-only.
+name: Upload SDK @next
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ${{ vars.RUNNER_LABEL || 'ubuntu-latest' }}
+    if: vars.ENABLE_NPM_PUBLISH == 'true'
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read # GHPR sibling fetch
+    env:
+      PUBLISH_TARGET: ${{ vars.PUBLISH_TARGET || 'ghpr' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PACKAGES_TOKEN }}
+
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10.33.2
+
+      - name: Setup Node.js (GitHub Packages)
+        if: env.PUBLISH_TARGET == 'ghpr'
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'pnpm'
+
+      - name: Setup Node.js (npm)
+        if: env.PUBLISH_TARGET == 'npm'
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Install dependencies (build toolchain + siblings)
+        run: |
+          for attempt in $(seq 1 90); do
+            pnpm install --frozen-lockfile --fix-lockfile && break
+            echo "::warning::Attempt $attempt failed, retrying in 10s..."
+            sleep 10
+          done
+          if [ ! -d node_modules ] || [ -z "$(ls -A node_modules 2>/dev/null)" ]; then
+            echo "::error::pnpm install failed after 90 attempts (15 min)."
+            exit 1
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ (vars.PUBLISH_TARGET || 'ghpr') == 'ghpr' && secrets.PACKAGES_TOKEN || '' }}
+
+      - name: Build (source-only — produce dist/responsivevoice.js)
+        run: pnpm build
+
+      - name: Install wrangler
+        run: npm install -g wrangler
+
+      - name: Upload SDK to CDN (next)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          wrangler r2 object put responsivevoice-cdn/sdk/next/responsivevoice.js --file ./dist/responsivevoice.js --ct application/javascript --cc "public, max-age=60, s-maxage=30" --remote &&
+          wrangler r2 object put responsivevoice-cdn/sdk/next/responsivevoice.js.map --file ./dist/responsivevoice.js.map --ct application/json --cc "public, max-age=60, s-maxage=30" --remote
