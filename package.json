@@ -1,7 +1,7 @@
 {
   "name": "@responsivevoice/core",
   "version": "2.0.0",
-  "description": "ResponsiveVoice TypeScript Text-to-Speech (TTS) client library",
+  "description": "Modern, TypeScript-first text-to-speech (TTS) for the browser — native voices with automatic server fallback, streaming, and premium voices (Azure, OpenAI, Google Cloud, and more).",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -46,6 +46,11 @@
     "tts",
     "web-speech-api",
     "voice",
+    "browser",
+    "streaming",
+    "azure",
+    "openai",
+    "google-cloud",
     "typescript",
     "javascript"
   ],
