@@ -219,3 +219,5 @@ Full documentation at [docs.responsivevoice.org](https://docs.responsivevoice.or
 ---
 
 **Other language SDKs:** [Python](https://github.com/responsivevoice/sdk-python) · [Go](https://github.com/responsivevoice/sdk-go) · [PHP](https://github.com/responsivevoice/sdk-php) · [Java](https://github.com/responsivevoice/sdk-java)
+
+**AI coding agents:** install the [ResponsiveVoice skill](https://github.com/responsivevoice/skills) — `npx skills add responsivevoice/skills`
