@@ -1,6 +1,6 @@
 {
   "name": "@responsivevoice/core",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Modern, TypeScript-first text-to-speech (TTS) for the browser — native voices with automatic server fallback, streaming, and premium voices (Azure, OpenAI, Google Cloud, and more).",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -65,10 +65,10 @@
   },
   "homepage": "https://github.com/responsivevoice/core#readme",
   "dependencies": {
-    "@responsivevoice/api-client": "^2.0.0",
-    "@responsivevoice/features": "^2.0.0",
+    "@responsivevoice/api-client": "^2.0.1",
+    "@responsivevoice/features": "^2.0.1",
     "@responsivevoice/text": "^2.0.0",
-    "@responsivevoice/types": "^2.0.0"
+    "@responsivevoice/types": "^2.0.1"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.3",

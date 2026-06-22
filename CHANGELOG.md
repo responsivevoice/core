@@ -1,5 +1,14 @@
 # @responsivevoice/core
 
+## 2.0.1
+
+### Patch Changes
+
+- Updated dependencies:
+  - @responsivevoice/types@2.0.1
+  - @responsivevoice/api-client@2.0.1
+  - @responsivevoice/features@2.0.1
+
 ## 2.0.0
 
 First public release of the rebuilt ResponsiveVoice — a complete, TypeScript-first rewrite of the original library, now split into focused, independently-versioned packages.
