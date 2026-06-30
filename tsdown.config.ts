@@ -3,7 +3,24 @@ import babel from '@rollup/plugin-babel';
 import { defineConfig } from 'tsdown';
 import { bannerFor } from './banner.ts';
 
-const { version } = JSON.parse(readFileSync('./package.json', 'utf8'));
+const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
+const { version } = pkg;
+// IIFE Babel target: the browserslist `legacy` env — from the workspace root in
+// the monorepo, or mirrored into this package.json in a split repo. Parsed into
+// preset-env's object form ("Edge >= 16" -> { edge: '16' }) to avoid a
+// browserslist lookup during the build.
+const legacyList =
+  pkg.browserslist?.legacy ??
+  JSON.parse(readFileSync('../../package.json', 'utf8')).browserslist.legacy;
+const legacyTargets = Object.fromEntries(
+  (legacyList as string[])
+    .map((entry) => entry.match(/^(\S+)\s*>=\s*(\d+)/))
+    .filter((match): match is RegExpMatchArray => match !== null)
+    .map((match) => [match[1].toLowerCase(), match[2]])
+    // The stock Android browser breaks preset-env's rolldown transform; Chrome
+    // Android is covered by `chrome`.
+    .filter(([name]) => name !== 'android')
+);
 const banner = bannerFor(import.meta.url);
 const define = { __RV_CORE_VERSION__: JSON.stringify(version) };
 
@@ -29,10 +46,7 @@ export default defineConfig([
       return options;
     },
   },
-  // IIFE bundle for script tag usage (auto-creates instance on window.responsiveVoice)
-  // Targets legacy browsers (Chrome 66+, Firefox 57+, Safari 12+, Edge 17+, iOS 12+).
-  // Babel + core-js auto-inject only the API polyfills these browsers need.
-  // Syntax downleveling to ES2017 is handled by tsdown's `target` option.
+  // IIFE bundle (global responsiveVoice); Babel + core-js inject only the needed polyfills.
   {
     entry: ['src/iife-entry.ts'],
     format: ['iife'],
@@ -67,13 +81,7 @@ export default defineConfig([
           [
             '@babel/preset-env',
             {
-              targets: {
-                chrome: '66',
-                firefox: '57',
-                safari: '12',
-                edge: '17',
-                ios: '12',
-              },
+              targets: legacyTargets,
               useBuiltIns: 'usage',
               corejs: '3.49',
             },

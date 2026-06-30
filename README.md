@@ -17,10 +17,12 @@
   <a href="https://www.npmjs.com/package/@responsivevoice/core"><img src="https://img.shields.io/npm/dm/@responsivevoice/core.svg" alt="npm downloads"></a>
   <a href="https://github.com/responsivevoice/core"><img src="https://img.shields.io/badge/GitHub-core-181717?logo=github&logoColor=white" alt="GitHub"></a>
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
-  <img src="https://img.shields.io/badge/Chrome-66+-4285F4?logo=googlechrome&logoColor=white" alt="Chrome 66+">
-  <img src="https://img.shields.io/badge/Firefox-57+-FF7139?logo=firefox&logoColor=white" alt="Firefox 57+">
+  <!-- compat-badges:start -->
+  <img src="https://img.shields.io/badge/Chrome-69+-4285F4?logo=googlechrome&logoColor=white" alt="Chrome 69+">
+  <img src="https://img.shields.io/badge/Firefox-65+-FF7139?logo=firefox&logoColor=white" alt="Firefox 65+">
   <img src="https://img.shields.io/badge/Safari-14+-006CFF?logo=safari&logoColor=white" alt="Safari 14+">
-  <img src="https://img.shields.io/badge/Edge-16+-0078D7?logo=microsoftedge&logoColor=white" alt="Edge 16+">
+  <img src="https://img.shields.io/badge/Edge-79+-0078D7?logo=microsoftedge&logoColor=white" alt="Edge 79+">
+<!-- compat-badges:end -->
 </p>
 
 ---
@@ -172,16 +174,18 @@ rv.speak('Hello', 'UK English Female', {
 
 For detailed compatibility information, see the [Browser Support documentation](https://docs.responsivevoice.org/guides/browser-support/).
 
-**Minimum browser versions:**
+Minimum browser versions (raw npm package, unpolyfilled — the CDN bundle reaches older browsers):
 
-| Browser        | Min Version | Native TTS | Fallback API |
-| -------------- | ----------- | ---------- | ------------ |
-| Chrome         | 66+         | Yes        | Yes          |
-| Firefox        | 57+         | Limited    | Yes          |
-| Safari         | 14+         | Yes        | Yes          |
-| Edge           | 16+         | Yes        | Yes          |
-| iOS Safari     | 14+         | Yes        | Yes          |
-| Chrome Android | 66+         | Yes        | Yes          |
+<!-- compat-minimums:start -->
+
+- Chrome 69+
+- Firefox 65+
+- Safari 14+
+- Edge 79+
+- iOS Safari 14+
+- Chrome Android 69+
+
+<!-- compat-minimums:end -->
 
 ### Bundlers
 
